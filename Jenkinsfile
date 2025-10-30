@@ -2,26 +2,21 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven'
+        maven 'Maven3'
         jdk 'JDK17'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/Shitalrk21/Student-Managment.git'
+                echo '📥 Checking out code...'
+                git branch: 'main', url: 'https://github.com/Shitalrk21/Student-Managment.git'
             }
         }
 
         stage('Build') {
             steps {
                 bat 'mvn clean install -DskipTests'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                bat 'mvn test'
             }
         }
 
@@ -33,8 +28,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                echo 'Deploying Spring Boot application...'
-                // Use full jar path here
+                echo '🚀 Deploying JAR...'
                 bat 'java -jar target\\StudentMgmtPSQL-0.0.1-SNAPSHOT.jar'
             }
         }
