@@ -2,22 +2,41 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven'
+        // Use Maven3 instead of Maven
+        maven 'Maven3'
         jdk 'JDK17'
     }
 
     stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Shitalrk21/Student-Managment.git'
+            }
+        }
+
         stage('Build') {
             steps {
-                echo 'Building the project...'
-                bat 'mvn clean package -DskipTests'
+                bat 'mvn clean install'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                bat 'mvn test'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                bat 'mvn package'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying JAR file to Tomcat...'
-                bat 'copy target\\*.jar C:\\apache-tomcat-9.0.91\\webapps\\'
+                echo 'Deploying Spring Boot application...'
+                // Run the jar file to verify deployment
+                bat 'java -jar target/*.jar'
             }
         }
     }
@@ -27,7 +46,7 @@ pipeline {
             echo '✅ Build and Deployment Successful!'
         }
         failure {
-            echo '❌ Build Failed!'
+            echo '❌ Build Failed. Check logs for details.'
         }
     }
 }
