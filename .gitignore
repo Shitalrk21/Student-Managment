@@ -1,6 +1,10 @@
 HELP.md
 target/
+<<<<<<< HEAD
 .mvn/wrapper/maven-wrapper.jar
+=======
+!.mvn/wrapper/maven-wrapper.jar
+>>>>>>> 63bc05f (updated code)
 !**/src/main/**/target/
 !**/src/test/**/target/
 
