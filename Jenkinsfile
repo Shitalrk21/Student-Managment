@@ -23,14 +23,23 @@ pipeline {
         }
 
         stage('Deploy') {
-            steps {
-                echo '🚀 Deploying JAR...'
-                bat """
-                    cd target
-                    java -jar StudentMgmtPSQL-0.0.1-SNAPSHOT.jar
-                """
-            }
-        }
+    steps {
+        echo '🚀 Deploying new JAR... (killing old one first)'
+
+        // Kill old java process if running
+        bat 'taskkill /F /IM java.exe || exit 0'
+
+        // Wait 2 seconds
+        bat 'timeout /t 2'
+
+        // Start new jar
+        bat """
+            cd target
+            java -jar StudentManagment-0.0.1-SNAPSHOT.jar
+        """
+    }
+}
+
     }
 
     post {
