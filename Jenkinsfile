@@ -15,20 +15,24 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            steps {
-                echo '🚀 Deploying JAR...'
+       stage('Deploy') {
+    steps {
+        echo '🚀 Deploying JAR...'
 
-                // Kill old running app
-                bat 'taskkill /F /IM java.exe || exit 0'
+        // Kill old app running on 8081
+        bat 'for /f "tokens=5" %a in (\'netstat -aon ^| find "8081"\') do taskkill /F /PID %a || exit 0'
 
-                // Start new jar
-                bat """
-                    cd target
-                    java -jar StudentManagment-0.0.1-SNAPSHOT.jar
-                """
-            }
-        }
+        // Short delay
+        bat 'timeout /t 2'
+
+        // Start new jar
+        bat """
+            cd target
+            java -jar StudentManagment-0.0.1-SNAPSHOT.jar
+        """
+    }
+}
+
     }
 
     post {
