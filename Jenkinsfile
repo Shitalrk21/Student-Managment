@@ -7,21 +7,17 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                echo '📥 Checking out code...'
-                git branch: 'main', url: 'https://github.com/Shitalrk21/Student-Managment.git'
-            }
-        }
 
         stage('Build') {
             steps {
+                echo '🔧 Building project...'
                 bat 'mvn clean install -DskipTests'
             }
         }
 
         stage('Package') {
             steps {
+                echo '📦 Packaging JAR...'
                 bat 'mvn package -DskipTests'
             }
         }
@@ -29,7 +25,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo '🚀 Deploying JAR...'
-                bat 'java -jar target\\StudentMgmtPSQL-0.0.1-SNAPSHOT.jar'
+                bat """
+                    cd target
+                    java -jar StudentMgmtPSQL-0.0.1-SNAPSHOT.jar
+                """
             }
         }
     }
