@@ -15,31 +15,20 @@ pipeline {
             }
         }
 
-        stage('Package') {
+        stage('Deploy') {
             steps {
-                echo '📦 Packaging JAR...'
-                bat 'mvn package -DskipTests'
+                echo '🚀 Deploying JAR...'
+
+                // Kill old running app
+                bat 'taskkill /F /IM java.exe || exit 0'
+
+                // Start new jar
+                bat """
+                    cd target
+                    java -jar StudentManagment-0.0.1-SNAPSHOT.jar
+                """
             }
         }
-
-        stage('Deploy') {
-    steps {
-        echo '🚀 Deploying new JAR... (killing old one first)'
-
-        // Kill old java process if running
-        bat 'taskkill /F /IM java.exe || exit 0'
-
-        // Wait 2 seconds
-        bat 'timeout /t 2'
-
-        // Start new jar
-        bat """
-            cd target
-            java -jar StudentManagment-0.0.1-SNAPSHOT.jar
-        """
-    }
-}
-
     }
 
     post {
