@@ -7,6 +7,7 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 echo '📥 Checking out code...'
@@ -25,13 +26,13 @@ pipeline {
             steps {
                 echo '🚀 Deploying JAR...'
 
-                // Kill previous Java instance (ignore error)
+                // Kill old Java process (ignore error)
                 bat 'taskkill /F /IM java.exe || exit 0'
 
-                // Move into target folder and run the jar
+                // Run JAR in background so Jenkins doesn't hang
                 bat '''
                 cd target
-                java -jar StudentManagment-0.0.1-SNAPSHOT.jar
+                start /B java -jar StudentManagment-0.0.1-SNAPSHOT.jar
                 '''
             }
         }
@@ -39,10 +40,10 @@ pipeline {
 
     post {
         success {
-            echo '✅ Build and Deployment Successful!'
+            echo '✅ Build & Deployment Successful!'
         }
         failure {
-            echo '❌ Build Failed. Check logs for details.'
+            echo '❌ Build Failed. Check logs!'
         }
     }
 }
