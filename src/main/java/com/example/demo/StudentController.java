@@ -20,7 +20,10 @@ public class StudentController {
 	@DeleteMapping("student/deleteStudent")
 	String deleteStudent(@RequestBody Student s) {
 		ss.deleteStudentFromDb(s);
+		
+		System.out.println("just cheking code");
 		return "student deleted";
+		
 	}
 	
 }
